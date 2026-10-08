@@ -1,0 +1,30 @@
+name: PL-SQL Autograding
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  autograding:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Required Files
+        run: |
+          test -f README.md
+          test -f starter.sql
+          test -f solution.sql
+          test -f test.sql
+          test -f .github/workflows/autograding.yml
+          echo "All required files are present."
+
+      - name: Verify Trigger Program
+        run: |
+          grep -qi "CREATE OR REPLACE TRIGGER" solution.sql
+          grep -qi "AFTER INSERT" solution.sql
+          grep -qi "ON Employee" solution.sql
+          grep -qi "DBMS_OUTPUT.PUT_LINE" solution.sql
+          echo "PL/SQL trigger program verified successfully."
